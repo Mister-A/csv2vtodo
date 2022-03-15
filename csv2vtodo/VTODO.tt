@@ -1,0 +1,44 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#@ parameter name="csv" type="System.Collections.Generic.List<WorkastCSVFile>" #>
+<#@ parameter name="lists" type="System.Collections.Generic.List<WorkastCSVFile>" #>
+<#@ parameter name="listssub" type="System.Collections.Generic.List<WorkastCSVFile>" #>
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//AndrewAldridge/csv2vtodo
+<# foreach (WorkastCSVFile list in lists) { #>
+BEGIN:VTODO
+DTSTAMP:<#= DateTime.Now.ToString("yyyyMMddTHHmmssZ") #>
+UID:<#= list.List #>
+SUMMARY:List : <#= list.List #>
+END:VTODO
+<# } #>
+<# foreach (WorkastCSVFile listsub in listssub) { #>
+BEGIN:VTODO
+DTSTAMP:<#= DateTime.Now.ToString("yyyyMMddTHHmmssZ") #>
+UID:<#= listsub.Task #>
+SUMMARY:List : <#= listsub.Task #>
+RELATED-TO:<#= listsub.List #>
+END:VTODO
+<# } #>
+<# foreach (WorkastCSVFile task in csv) { #>
+BEGIN:VTODO
+UID:<#= task.ID #>
+DTSTAMP:<#= DateTime.Now.ToString("yyyyMMddTHHmmssZ") #>
+<# if (task.DueDate != null) { WriteLine("DUE;VALUE=DATE:" + task.DueDate.Value.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture)); } #>
+<# if (task.StartDate != null) { WriteLine("DTSTART:" + task.StartDate.Value.ToString("yyyyMMddTHHmmssZ", System.Globalization.CultureInfo.InvariantCulture)); } #>
+RELATED-TO:<# if (task.Subtask == "") { WriteLine(task.List); } else { WriteLine(task.Task); } #>
+STATUS:<# if (task.Status == "removed") { WriteLine("CANCELLED"); } else if (task.Status == "done") { WriteLine("COMPLETED"); } else { WriteLine("NEEDS-ACTION"); } #>
+SUMMARY:<# if (task.Subtask == "") { WriteLine(task.Task); } else { WriteLine(task.Subtask);} #>
+ORGANIZER:<#= task.CreatedBy #>
+ATTENDEE:<#= task.AssignedTo #>
+<# if (task.CompletedOn != null) { WriteLine("LAST-MODIFIED:" + task.CompletedOn.Value.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture)); } #>
+<# if (task.Tags != "") { WriteLine("CATEGORIES:" + task.Tags); } #>
+<# if (task.Link != "") { WriteLine("COMMENT:" + task.Link); } #>
+END:VTODO
+<# } #>
+END:VCALENDAR
