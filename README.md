@@ -24,6 +24,7 @@ Workast Lists will be created as top-level tasks.
 Workast Tasks will be placed within those lists as sub-tasks.
 If your Workast Tasks contained Sub Tasks those will be created as sub-sub-tasks.
     
-
+## Issues
+Originally I intended to import my tasks to Nextcloud Decks - their Kanban style card task list - as a full Workast replacement, but I discovered Decks are not yet writeable via CalDAV 😞, ref: https://github.com/nextcloud/deck/issues/2399 so I've settled on using the main Tasks App in Nextcloud for now, if Decks become writeable via CalDAV I'll revisit this to ensure compatibility, but nested tasks work pretty well instead and will help me move all my data from overseas cloud providers to my private server.
 
 
