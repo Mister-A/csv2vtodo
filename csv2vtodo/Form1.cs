@@ -47,7 +47,7 @@ namespace csv2vtodo
         }
 
         /// <summary>
-        /// Do it
+        /// Convert using T4 template
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
